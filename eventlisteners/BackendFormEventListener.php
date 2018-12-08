@@ -33,6 +33,10 @@ class BackendFormEventListener
 
     public function onExtendFields(Form $widget)
     {
+        if (!$this->settings->getModelsPlugin()) {
+            return;
+        }
+
         if (
             $this->pluginManager->hasPlugin('RainLab.Pages')
             && $widget->model instanceof \RainLab\Pages\Classes\Page

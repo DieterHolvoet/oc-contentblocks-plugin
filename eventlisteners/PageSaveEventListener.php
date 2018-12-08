@@ -6,6 +6,7 @@ use Backend\Traits\FormModelSaver;
 use Cms\Controllers\Index;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
 use DieterHolvoet\ContentBlocks\Classes\HostDefinitionManager;
+use DieterHolvoet\ContentBlocks\Models\Settings;
 use Illuminate\Database\DatabaseManager;
 use October\Rain\Database\Model;
 
@@ -19,20 +20,27 @@ class PageSaveEventListener
     protected $contentBlockDefinitions;
     /** @var HostDefinitionManager */
     protected $hostDefinitions;
+    /** @var Settings */
+    protected $settings;
 
     public function __construct(
         DatabaseManager $database,
         ContentBlockDefinitionManager $contentBlockDefinitions,
-        HostDefinitionManager $hostDefinitions
+        HostDefinitionManager $hostDefinitions,
+        Settings $settings
     ) {
         $this->database = $database;
         $this->contentBlockDefinitions = $contentBlockDefinitions;
         $this->hostDefinitions = $hostDefinitions;
+        $this->settings = $settings;
     }
 
     public function onCmsPageSave(Index $template, $instance)
     {
-        if (!$instance instanceof \Cms\Classes\Page) {
+        if (
+            !$instance instanceof \Cms\Classes\Page
+            || !$this->settings->getModelsPlugin()
+        ) {
             return;
         }
 
@@ -41,7 +49,10 @@ class PageSaveEventListener
 
     public function onStaticPageSave($controller, $instance, $type)
     {
-        if (!$instance instanceof \RainLab\Pages\Classes\Page) {
+        if (
+            !$instance instanceof \RainLab\Pages\Classes\Page
+            || !$this->settings->getModelsPlugin()
+        ) {
             return;
         }
 

@@ -21,8 +21,8 @@ class ContentBlockDefinitionManager
 
     /** @var array */
     protected $modelMap;
-    /** @var string */
-    protected $modelPlugin;
+    /** @var Settings */
+    protected $settings;
 
     public function __construct(
         Filesystem $filesystem,
@@ -33,7 +33,7 @@ class ContentBlockDefinitionManager
         $this->filesystem = $filesystem;
         $this->pluginManager = $pluginManager;
         $this->containerDefinitionManager = $containerDefinitionManager;
-        $this->modelPlugin = $settings->getModelsPlugin();
+        $this->settings = $settings;
     }
 
     public function getClassName(string $shortName)
@@ -52,12 +52,16 @@ class ContentBlockDefinitionManager
 
     public function getModels()
     {
+        if (!$this->settings->getModelsPlugin()) {
+            return [];
+        }
+
         if (isset($this->modelMap)) {
             return $this->modelMap;
         }
 
         $models = [];
-        $plugin = $this->pluginManager->findByIdentifier($this->modelPlugin);
+        $plugin = $this->pluginManager->findByIdentifier($this->settings->getModelsPlugin());
         $pluginNamespace = explode('\\', get_class($plugin));
         $pluginNamespace = array_slice($pluginNamespace, 0, 2);
 
@@ -78,17 +82,12 @@ class ContentBlockDefinitionManager
         return $this->modelMap = $models;
     }
 
-    public function getModelPlugin()
-    {
-        return $this->modelPlugin;
-    }
-
     public function getModelsPath()
     {
         return sprintf(
             '%s/%s/models',
             plugins_path(),
-            str_replace('.', '/', $this->modelPlugin)
+            str_replace('.', '/', $this->settings->getModelsPlugin())
         );
     }
 
