@@ -1,10 +1,10 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Extenders;
+namespace DieterHolvoet\ContentBlocks\Extenders;
 
 use Cms\Classes\CmsObject;
-use DieterHolvoet\ContentBlock\Classes\ContentBlockDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\ContentBlockManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockManager;
 use October\Rain\Database\Model;
 
 class PageExtender

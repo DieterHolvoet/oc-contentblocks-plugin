@@ -1,8 +1,8 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Classes;
+namespace DieterHolvoet\ContentBlocks\Classes;
 
-use DieterHolvoet\ContentBlock\Models\Settings;
+use DieterHolvoet\ContentBlocks\Models\Settings;
 use System\Traits\ConfigMaker;
 
 class ContainerDefinitionManager

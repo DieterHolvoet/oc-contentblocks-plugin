@@ -1,8 +1,8 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Validators;
+namespace DieterHolvoet\ContentBlocks\Validators;
 
-use DieterHolvoet\ContentBlock\Classes\ContainerDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContainerDefinitionManager;
 use October\Rain\Filesystem\Filesystem;
 
 class ContentBlockPluginValidator

@@ -1,9 +1,9 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Extenders;
+namespace DieterHolvoet\ContentBlocks\Extenders;
 
-use DieterHolvoet\ContentBlock\Classes\ContentBlockDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\HostManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\HostManager;
 use October\Rain\Database\Model;
 
 class ContentBlockExtender

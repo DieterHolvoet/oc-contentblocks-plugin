@@ -1,18 +1,18 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock;
+namespace DieterHolvoet\ContentBlocks;
 
-use DieterHolvoet\ContentBlock\Classes\ContainerDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\ContentBlockDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\ContentBlockManager;
-use DieterHolvoet\ContentBlock\Classes\HostDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\HostManager;
-use DieterHolvoet\ContentBlock\EventListeners\BackendFormEventListener;
-use DieterHolvoet\ContentBlock\EventListeners\PageSaveEventListener;
-use DieterHolvoet\ContentBlock\Extenders\PageExtender;
-use DieterHolvoet\ContentBlock\Extenders\ContentBlockExtender;
-use DieterHolvoet\ContentBlock\Models\Settings;
-use DieterHolvoet\ContentBlock\Validators\ContentBlockPluginValidator;
+use DieterHolvoet\ContentBlocks\Classes\ContainerDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockManager;
+use DieterHolvoet\ContentBlocks\Classes\HostDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\HostManager;
+use DieterHolvoet\ContentBlocks\EventListeners\BackendFormEventListener;
+use DieterHolvoet\ContentBlocks\EventListeners\PageSaveEventListener;
+use DieterHolvoet\ContentBlocks\Extenders\PageExtender;
+use DieterHolvoet\ContentBlocks\Extenders\ContentBlockExtender;
+use DieterHolvoet\ContentBlocks\Models\Settings;
+use DieterHolvoet\ContentBlocks\Validators\ContentBlockPluginValidator;
 use Event;
 use Illuminate\Support\Facades\Validator;
 use Lang;
@@ -32,8 +32,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'dieterholvoet.contentblock::plugin.name',
-            'description' => 'dieterholvoet.contentblock::plugin.description',
+            'name'        => 'dieterholvoet.contentblocks::plugin.name',
+            'description' => 'dieterholvoet.contentblocks::plugin.description',
             'author'      => 'Dieter Holvoet',
             'icon'        => 'icon-th-large'
         ];
@@ -48,8 +48,8 @@ class Plugin extends PluginBase
     {
         return [
             'location' => [
-                'label'       => 'dieterholvoet.contentblock::menu.settings.label',
-                'description' => 'dieterholvoet.contentblock::menu.settings.description',
+                'label'       => 'dieterholvoet.contentblocks::menu.settings.label',
+                'description' => 'dieterholvoet.contentblocks::menu.settings.description',
                 'category'    => SettingsManager::CATEGORY_CMS,
                 'icon'        => 'icon-th-large',
                 'class'       => Settings::class,
@@ -68,37 +68,37 @@ class Plugin extends PluginBase
          * Managers
          */
 
-        $this->app->bind('dieterholvoet.contentBlock.containerDefinitionManager', function () {
+        $this->app->bind('dieterholvoet.contentBlocks.containerDefinitionManager', function () {
             return new ContainerDefinitionManager(
                 Settings::instance()
             );
         });
 
-        $this->app->bind('dieterholvoet.contentBlock.contentBlockDefinitionManager', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.contentBlockDefinitionManager', function (ContainerInterface $container) {
             return new ContentBlockDefinitionManager(
                 $container->get('files'),
                 PluginManager::instance(),
-                $container->get('dieterholvoet.contentBlock.containerDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.containerDefinitionManager'),
                 Settings::instance()
             );
         });
 
-        $this->app->bind('dieterholvoet.contentBlock.contentBlockManager', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.contentBlockManager', function (ContainerInterface $container) {
             return new ContentBlockManager(
-                $container->get('dieterholvoet.contentBlock.hostDefinitionManager'),
-                $container->get('dieterholvoet.contentBlock.contentBlockDefinitionManager')
+                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager')
             );
         });
 
-        $this->app->bind('dieterholvoet.contentBlock.hostDefinitionManager', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.hostDefinitionManager', function (ContainerInterface $container) {
             return new HostDefinitionManager(
                 config('cms.activeTheme')
             );
         });
 
-        $this->app->bind('dieterholvoet.contentBlock.hostManager', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.hostManager', function (ContainerInterface $container) {
             return new HostManager(
-                $container->get('dieterholvoet.contentBlock.hostDefinitionManager')
+                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager')
             );
         });
 
@@ -106,20 +106,20 @@ class Plugin extends PluginBase
          * Event listeners
          */
 
-        $this->app->bind('dieterholvoet.contentBlock.backendFormListener', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.backendFormListener', function (ContainerInterface $container) {
             return new BackendFormEventListener(
                 PluginManager::instance(),
-                $container->get('dieterholvoet.contentBlock.contentBlockDefinitionManager'),
-                $container->get('dieterholvoet.contentBlock.containerDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.containerDefinitionManager'),
                 Settings::instance()
             );
         });
 
-        $this->app->bind('dieterholvoet.contentBlock.pageSaveListener', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.pageSaveListener', function (ContainerInterface $container) {
             return new PageSaveEventListener(
                 $container->get('db'),
-                $container->get('dieterholvoet.contentBlock.contentBlockDefinitionManager'),
-                $container->get('dieterholvoet.contentBlock.hostDefinitionManager')
+                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager')
             );
         });
 
@@ -127,17 +127,17 @@ class Plugin extends PluginBase
          * Extenders
          */
 
-        $this->app->bind('dieterholvoet.contentBlock.contentBlockExtender', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.contentBlockExtender', function (ContainerInterface $container) {
             return new ContentBlockExtender(
-                $container->get('dieterholvoet.contentBlock.contentBlockDefinitionManager'),
-                $container->get('dieterholvoet.contentBlock.hostManager')
+                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.hostManager')
             );
         });
 
-        $this->app->bind('dieterholvoet.contentBlock.pageExtender', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.pageExtender', function (ContainerInterface $container) {
             return new PageExtender(
-                $container->get('dieterholvoet.contentBlock.contentBlockDefinitionManager'),
-                $container->get('dieterholvoet.contentBlock.contentBlockManager')
+                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.contentBlockManager')
             );
         });
 
@@ -145,10 +145,10 @@ class Plugin extends PluginBase
          * Validators
          */
 
-        $this->app->bind('dieterholvoet.contentBlock.validator.contentBlockPlugin', function (ContainerInterface $container) {
+        $this->app->bind('dieterholvoet.contentBlocks.validator.contentBlockPlugin', function (ContainerInterface $container) {
             return new ContentBlockPluginValidator(
                 $container->get('files'),
-                $container->get('dieterholvoet.contentBlock.containerDefinitionManager')
+                $container->get('dieterholvoet.contentBlocks.containerDefinitionManager')
             );
         });
     }
@@ -162,9 +162,9 @@ class Plugin extends PluginBase
          * Event listeners
          */
 
-        Event::listen('backend.form.extendFields', 'dieterholvoet.contentBlock.backendFormListener@onExtendFields');
-        Event::listen('cms.template.save', 'dieterholvoet.contentBlock.pageSaveListener@onCmsPageSave');
-        Event::listen('pages.object.save', 'dieterholvoet.contentBlock.pageSaveListener@onStaticPageSave');
+        Event::listen('backend.form.extendFields', 'dieterholvoet.contentBlocks.backendFormListener@onExtendFields');
+        Event::listen('cms.template.save', 'dieterholvoet.contentBlocks.pageSaveListener@onCmsPageSave');
+        Event::listen('pages.object.save', 'dieterholvoet.contentBlocks.pageSaveListener@onStaticPageSave');
 
         /**
          * Extenders
@@ -175,16 +175,16 @@ class Plugin extends PluginBase
 
         foreach ($hostModels as $model) {
             $model::extend(function ($model) {
-                $this->app->get('dieterholvoet.contentBlock.pageExtender')->extend($model);
+                $this->app->get('dieterholvoet.contentBlocks.pageExtender')->extend($model);
             });
         }
 
         /** @var Extendable[] $contentBlockModels */
-        $contentBlockModels = app('dieterholvoet.contentBlock.contentBlockDefinitionManager')->getModels();
+        $contentBlockModels = app('dieterholvoet.contentBlocks.contentBlockDefinitionManager')->getModels();
 
         foreach ($contentBlockModels as $model) {
             $model::extend(function ($model) {
-                $this->app->get('dieterholvoet.contentBlock.contentBlockExtender')->extend($model);
+                $this->app->get('dieterholvoet.contentBlocks.contentBlockExtender')->extend($model);
             });
         }
 
@@ -193,10 +193,10 @@ class Plugin extends PluginBase
          */
 
         Validator::resolver(function($translator, $data, $rules, $messages, $customAttributes) {
-            $messages = array_merge($messages, Lang::get('dieterholvoet.contentblock::validation'));
+            $messages = array_merge($messages, Lang::get('dieterholvoet.contentblocks::validation'));
             return new \Illuminate\Validation\Validator($translator, $data, $rules, $messages, $customAttributes);
         });
 
-        Validator::extend('content_block_has_containers', 'dieterholvoet.contentBlock.validator.contentBlockPlugin@hasContainerDefinition');
+        Validator::extend('content_block_has_containers', 'dieterholvoet.contentBlocks.validator.contentBlockPlugin@hasContainerDefinition');
     }
 }

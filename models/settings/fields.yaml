@@ -4,10 +4,10 @@
 
 fields:
     default_container:
-        label: dieterholvoet.contentblock::field.settings.default_container.label
-        comment: dieterholvoet.contentblock::field.settings.default_container.description
+        label: dieterholvoet.contentblocks::field.settings.default_container.label
+        comment: dieterholvoet.contentblocks::field.settings.default_container.description
         type: dropdown
     models_plugin:
-        label: dieterholvoet.contentblock::field.settings.models_plugin.label
-        comment: dieterholvoet.contentblock::field.settings.models_plugin.description
+        label: dieterholvoet.contentblocks::field.settings.models_plugin.label
+        comment: dieterholvoet.contentblocks::field.settings.models_plugin.description
         type: dropdown

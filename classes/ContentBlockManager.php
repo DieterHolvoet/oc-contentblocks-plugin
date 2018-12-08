@@ -1,6 +1,6 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Classes;
+namespace DieterHolvoet\ContentBlocks\Classes;
 
 class ContentBlockManager
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Models;
+namespace DieterHolvoet\ContentBlocks\Models;
 
 use Lang;
 use Model;
@@ -22,7 +22,7 @@ class Settings extends Model
     /**
      * @var string A unique code
      */
-    public $settingsCode = 'dieterholvoet_contentblock_settings';
+    public $settingsCode = 'dieterholvoet_contentblocks_settings';
 
     /**
      * @var string Reference to field configuration
@@ -32,7 +32,7 @@ class Settings extends Model
     /**
      * @var string The database table used by the model.
      */
-    public $table = 'dieterholvoet_contentblock_settings';
+    public $table = 'dieterholvoet_contentblocks_settings';
 
     /**
      * @var array Guarded fields
@@ -68,7 +68,7 @@ class Settings extends Model
     {
         return array_map(
             function (array $definition) { return $definition['label']; },
-            app('dieterholvoet.contentBlock.containerDefinitionManager')->getDefinitions()
+            app('dieterholvoet.contentBlocks.containerDefinitionManager')->getDefinitions()
         );
     }
 

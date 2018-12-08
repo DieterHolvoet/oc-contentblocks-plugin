@@ -1,11 +1,11 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\EventListeners;
+namespace DieterHolvoet\ContentBlocks\EventListeners;
 
 use Backend\Widgets\Form;
-use DieterHolvoet\ContentBlock\Classes\ContainerDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\ContentBlockDefinitionManager;
-use DieterHolvoet\ContentBlock\Models\Settings;
+use DieterHolvoet\ContentBlocks\Classes\ContainerDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
+use DieterHolvoet\ContentBlocks\Models\Settings;
 use System\Classes\PluginManager;
 
 class BackendFormEventListener

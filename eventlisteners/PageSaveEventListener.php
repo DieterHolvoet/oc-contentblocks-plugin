@@ -1,11 +1,11 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\EventListeners;
+namespace DieterHolvoet\ContentBlocks\EventListeners;
 
 use Backend\Traits\FormModelSaver;
 use Cms\Controllers\Index;
-use DieterHolvoet\ContentBlock\Classes\ContentBlockDefinitionManager;
-use DieterHolvoet\ContentBlock\Classes\HostDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\HostDefinitionManager;
 use Illuminate\Database\DatabaseManager;
 use October\Rain\Database\Model;
 

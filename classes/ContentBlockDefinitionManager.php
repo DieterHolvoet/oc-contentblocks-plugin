@@ -1,8 +1,8 @@
 <?php
 
-namespace DieterHolvoet\ContentBlock\Classes;
+namespace DieterHolvoet\ContentBlocks\Classes;
 
-use DieterHolvoet\ContentBlock\Models\Settings;
+use DieterHolvoet\ContentBlocks\Models\Settings;
 use Model;
 use October\Rain\Filesystem\Filesystem;
 use System\Classes\PluginManager;
