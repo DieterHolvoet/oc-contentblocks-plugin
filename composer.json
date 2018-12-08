@@ -1,0 +1,24 @@
+{
+    "name": "dieterholvoet/oc-contentblocks-plugin",
+    "type": "october-plugin",
+    "description": "Attach model-based content blocks to pages.",
+    "keywords": [
+        "october",
+        "octobercms",
+        "content blocks",
+        "paragraphs"
+    ],
+    "license": "GNU GPLv3",
+    "authors": [
+        {
+            "name": "Dieter Holvoet",
+            "email": "dieter.holvoet@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "composer/installers": "~1.0"
+    },
+    "minimum-stability": "dev"
+}
