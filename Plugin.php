@@ -119,7 +119,8 @@ class Plugin extends PluginBase
             return new PageSaveEventListener(
                 $container->get('db'),
                 $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
-                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager')
+                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
+                Settings::instance()
             );
         });
 
