@@ -87,7 +87,7 @@ class ContentBlockDefinitionManager
         return sprintf(
             '%s/%s/models',
             plugins_path(),
-            str_replace('.', '/', $this->settings->getModelsPlugin())
+            str_replace('.', '/', strtolower($this->settings->getModelsPlugin()))
         );
     }
 
