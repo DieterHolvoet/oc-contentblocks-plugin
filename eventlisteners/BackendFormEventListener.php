@@ -2,6 +2,8 @@
 
 namespace DieterHolvoet\ContentBlocks\EventListeners;
 
+use Backend\Classes\AuthManager;
+use Backend\Models\User;
 use Backend\Widgets\Form;
 use DieterHolvoet\ContentBlocks\Classes\ContainerDefinitionManager;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
@@ -10,6 +12,8 @@ use System\Classes\PluginManager;
 
 class BackendFormEventListener
 {
+    /** @var User */
+    protected $user;
     /** @var PluginManager */
     protected $pluginManager;
     /** @var ContentBlockDefinitionManager */
@@ -20,11 +24,13 @@ class BackendFormEventListener
     protected $settings;
 
     public function __construct(
+        AuthManager $authManager,
         PluginManager $pluginManager,
         ContentBlockDefinitionManager $contentBlockDefinitions,
         ContainerDefinitionManager $containerDefinitions,
         Settings $settings
     ) {
+        $this->user = $authManager->getUser();
         $this->pluginManager = $pluginManager;
         $this->contentBlockDefinitions = $contentBlockDefinitions;
         $this->containerDefinitions = $containerDefinitions;
@@ -57,23 +63,30 @@ class BackendFormEventListener
         $containers = $this->containerDefinitions->getDefinitions();
         $groups = $this->contentBlockDefinitions->getFieldGroupsByContainer($container);
 
-        $widget->addTabFields([
-            'settings[contentBlockContainer]' => [
-                'tab' => 'Content blocks',
-                'title' => 'Content block container',
-                'type' => 'dropdown',
-                'options' => array_map(
-                    function (array $definition) { return $definition['label']; },
-                    $containers
-                ),
-            ],
-            'contentBlockFields' => [
-                'tab' => 'Content blocks',
-                'type' => 'repeater',
-                'prompt' => 'Add another content block',
-                'groups' => $groups,
-            ],
-        ]);
+        if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_container')) {
+            $widget->addTabFields([
+                'settings[contentBlockContainer]' => [
+                    'tab' => 'Content blocks',
+                    'title' => 'Content block container',
+                    'type' => 'dropdown',
+                    'options' => array_map(
+                        function (array $definition) { return $definition['label']; },
+                        $containers
+                    ),
+                ],
+            ]);
+        }
+
+        if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_content_blocks')) {
+            $widget->addTabFields([
+                'contentBlockFields' => [
+                    'tab' => 'Content blocks',
+                    'type' => 'repeater',
+                    'prompt' => 'Add another content block',
+                    'groups' => $groups,
+                ],
+            ]);
+        }
     }
 
     protected function handleStaticPages(Form $widget)
@@ -83,22 +96,29 @@ class BackendFormEventListener
         $containers = $this->containerDefinitions->getDefinitions();
         $groups = $this->contentBlockDefinitions->getFieldGroupsByContainer($container);
 
-        $widget->addTabFields([
-            'viewBag[contentBlockContainer]' => [
-                'tab' => 'Content blocks',
-                'title' => 'Content block container',
-                'type' => 'dropdown',
-                'options' => array_map(
-                    function (array $definition) { return $definition['label']; },
-                    $containers
-                ),
-            ],
-            'contentBlockFields' => [
-                'tab' => 'Content blocks',
-                'type' => 'repeater',
-                'prompt' => 'Add another content block',
-                'groups' => $groups,
-            ],
-        ]);
+        if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_container')) {
+            $widget->addTabFields([
+                'viewBag[contentBlockContainer]' => [
+                    'tab' => 'Content blocks',
+                    'title' => 'Content block container',
+                    'type' => 'dropdown',
+                    'options' => array_map(
+                        function (array $definition) { return $definition['label']; },
+                        $containers
+                    ),
+                ],
+            ]);
+        }
+
+        if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_content_blocks')) {
+            $widget->addTabFields([
+                'contentBlockFields' => [
+                    'tab' => 'Content blocks',
+                    'type' => 'repeater',
+                    'prompt' => 'Add another content block',
+                    'groups' => $groups,
+                ],
+            ]);
+        }
     }
 }

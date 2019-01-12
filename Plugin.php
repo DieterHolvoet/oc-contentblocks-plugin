@@ -108,6 +108,7 @@ class Plugin extends PluginBase
 
         $this->app->bind('dieterholvoet.contentBlocks.backendFormListener', function (ContainerInterface $container) {
             return new BackendFormEventListener(
+                $container->get('backend.auth'),
                 PluginManager::instance(),
                 $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.containerDefinitionManager'),
@@ -199,5 +200,19 @@ class Plugin extends PluginBase
         });
 
         Validator::extend('content_block_has_containers', 'dieterholvoet.contentBlocks.validator.contentBlockPlugin@hasContainerDefinition');
+    }
+
+    public function registerPermissions()
+    {
+        return [
+            'dieterholvoet.contentblocks.manage_content_blocks' => [
+                'label' => 'dieterholvoet.contentblocks::permissions.manage_content_blocks',
+                'tab' => 'dieterholvoet.contentblocks::plugin.name',
+            ],
+            'dieterholvoet.contentblocks.manage_container' => [
+                'label' => 'dieterholvoet.contentblocks::permissions.manage_container',
+                'tab' => 'dieterholvoet.contentblocks::plugin.name',
+            ],
+        ];
     }
 }
