@@ -79,7 +79,7 @@ class BackendFormEventListener
 
         if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_content_blocks')) {
             $widget->addTabFields([
-                'contentBlockFields' => [
+                'contentBlocks' => [
                     'tab' => 'Content blocks',
                     'type' => 'contentblockrepeater',
                     'prompt' => 'Add another content block',

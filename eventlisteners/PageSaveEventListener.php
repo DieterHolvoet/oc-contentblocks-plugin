@@ -73,7 +73,7 @@ class PageSaveEventListener
             }
 
             // Recreate content blocks
-            foreach (array_values(post('contentBlockFields', [])) as $i => $data) {
+            foreach (array_values(post('contentBlocks', [])) as $i => $data) {
                 $className = $this->contentBlockDefinitions->getClassName($data['_group']);
                 $contentBlock = new $className;
 
