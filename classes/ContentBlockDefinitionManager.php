@@ -47,7 +47,16 @@ class ContentBlockDefinitionManager
             $className = get_class($className);
         }
 
-        return array_flip($this->getModels())[$className] ?? null;
+        // PHP class names are case insensitive
+        $className = strtolower($className);
+        $models = array_flip(
+            array_map(function (string $className) {
+                return strtolower($className);
+            }, $this->getModels()
+            )
+        );
+
+        return $models[$className] ?? null;
     }
 
     public function getModels()
