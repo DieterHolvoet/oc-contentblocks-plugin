@@ -11,6 +11,7 @@ use DieterHolvoet\ContentBlocks\EventListeners\BackendFormEventListener;
 use DieterHolvoet\ContentBlocks\EventListeners\PageSaveEventListener;
 use DieterHolvoet\ContentBlocks\Extenders\PageExtender;
 use DieterHolvoet\ContentBlocks\Extenders\ContentBlockExtender;
+use Dieterholvoet\Contentblocks\FormWidgets\ContentBlockRepeater;
 use DieterHolvoet\ContentBlocks\Models\Settings;
 use DieterHolvoet\ContentBlocks\Validators\ContentBlockPluginValidator;
 use Event;
@@ -139,7 +140,6 @@ class Plugin extends PluginBase
 
         $this->app->bind('dieterholvoet.contentBlocks.pageExtender', function (ContainerInterface $container) {
             return new PageExtender(
-                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.contentBlockManager')
             );
         });
@@ -218,6 +218,13 @@ class Plugin extends PluginBase
                 'label' => 'dieterholvoet.contentblocks::plugin.permissions.manage_settings',
                 'tab' => 'dieterholvoet.contentblocks::plugin.name',
             ],
+        ];
+    }
+
+    public function registerFormWidgets()
+    {
+        return [
+            ContentBlockRepeater::class => 'contentblockrepeater',
         ];
     }
 }

@@ -81,7 +81,7 @@ class BackendFormEventListener
             $widget->addTabFields([
                 'contentBlockFields' => [
                     'tab' => 'Content blocks',
-                    'type' => 'repeater',
+                    'type' => 'contentblockrepeater',
                     'prompt' => 'Add another content block',
                     'groups' => $groups,
                 ],
@@ -112,9 +112,9 @@ class BackendFormEventListener
 
         if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_content_blocks')) {
             $widget->addTabFields([
-                'contentBlockFields' => [
+                'contentBlocks' => [
                     'tab' => 'Content blocks',
-                    'type' => 'repeater',
+                    'type' => 'contentblockrepeater',
                     'prompt' => 'Add another content block',
                     'groups' => $groups,
                 ],

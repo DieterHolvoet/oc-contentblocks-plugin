@@ -3,22 +3,16 @@
 namespace DieterHolvoet\ContentBlocks\Extenders;
 
 use Cms\Classes\CmsObject;
-use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockManager;
-use October\Rain\Database\Model;
 
 class PageExtender
 {
-    /** @var ContentBlockDefinitionManager */
-    protected $contentBlockDefinitions;
     /** @var ContentBlockManager */
     protected $contentBlocks;
 
     public function __construct(
-        ContentBlockDefinitionManager $contentBlockDefinitions,
         ContentBlockManager $contentBlocks
     ) {
-        $this->contentBlockDefinitions = $contentBlockDefinitions;
         $this->contentBlocks = $contentBlocks;
     }
 
@@ -26,18 +20,6 @@ class PageExtender
     {
         $model->addDynamicMethod('getContentBlocksAttribute', function() use ($model) {
             return $this->contentBlocks->getBlocks($model);
-        });
-
-        $model->addDynamicMethod('getContentBlockFieldsAttribute', function() use ($model) {
-            return array_map(
-                function (Model $model) {
-                    return array_merge(
-                        ['_group' => $this->contentBlockDefinitions->getShortName($model)],
-                        $model->toArray()
-                    );
-                },
-                $this->contentBlocks->getBlocks($model)
-            );
         });
     }
 }
