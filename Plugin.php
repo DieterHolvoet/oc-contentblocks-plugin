@@ -207,15 +207,15 @@ class Plugin extends PluginBase
     {
         return [
             'dieterholvoet.contentblocks.manage_content_blocks' => [
-                'label' => 'dieterholvoet.contentblocks::permissions.manage_content_blocks',
+                'label' => 'dieterholvoet.contentblocks::plugin.permissions.manage_content_blocks',
                 'tab' => 'dieterholvoet.contentblocks::plugin.name',
             ],
             'dieterholvoet.contentblocks.manage_container' => [
-                'label' => 'dieterholvoet.contentblocks::permissions.manage_container',
+                'label' => 'dieterholvoet.contentblocks::plugin.permissions.manage_container',
                 'tab' => 'dieterholvoet.contentblocks::plugin.name',
             ],
             'dieterholvoet.contentblocks.manage_settings' => [
-                'label' => 'dieterholvoet.contentblocks::permissions.manage_settings',
+                'label' => 'dieterholvoet.contentblocks::plugin.permissions.manage_settings',
                 'tab' => 'dieterholvoet.contentblocks::plugin.name',
             ],
         ];
