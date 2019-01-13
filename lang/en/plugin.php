@@ -6,5 +6,6 @@ return [
     'permissions' => [
         'manage_content_blocks' => 'Manage content blocks',
         'manage_container' => 'Manage content block containers',
+        'manage_settings' => 'Manage the plugin settings',
     ],
 ];

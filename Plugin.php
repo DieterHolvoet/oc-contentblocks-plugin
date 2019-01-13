@@ -54,8 +54,9 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-th-large',
                 'class'       => Settings::class,
                 'order'       => 500,
-                'keywords'    => 'content blocks contentblocks paragraphs models'
-            ]
+                'keywords'    => 'content blocks contentblocks paragraphs models',
+                'permissions' => ['dieterholvoet.contentblocks.manage_settings'],
+            ],
         ];
     }
 
@@ -211,6 +212,10 @@ class Plugin extends PluginBase
             ],
             'dieterholvoet.contentblocks.manage_container' => [
                 'label' => 'dieterholvoet.contentblocks::permissions.manage_container',
+                'tab' => 'dieterholvoet.contentblocks::plugin.name',
+            ],
+            'dieterholvoet.contentblocks.manage_settings' => [
+                'label' => 'dieterholvoet.contentblocks::permissions.manage_settings',
                 'tab' => 'dieterholvoet.contentblocks::plugin.name',
             ],
         ];
