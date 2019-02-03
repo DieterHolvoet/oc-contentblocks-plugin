@@ -2,7 +2,7 @@
 
 return [
     'settings' => [
-        'label' => 'Content blocks',
-        'description' => 'Beheer instellingen gerelateerd aan de content blocks-plugin.',
+        'label' => 'Inhoudsblokken',
+        'description' => 'Beheer instellingen gerelateerd aan de inhoudsblokken-plugin.',
     ],
 ];

@@ -66,8 +66,8 @@ class BackendFormEventListener
         if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_container')) {
             $widget->addTabFields([
                 'settings[contentBlockContainer]' => [
-                    'tab' => 'Content blocks',
-                    'title' => 'Content block container',
+                    'tab' => 'dieterholvoet.contentblocks::plugin.name',
+                    'title' => 'dieterholvoet.contentblocks::field.container',
                     'type' => 'dropdown',
                     'options' => array_map(
                         function (array $definition) { return $definition['label']; },
@@ -80,9 +80,9 @@ class BackendFormEventListener
         if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_content_blocks')) {
             $widget->addTabFields([
                 'contentBlocks' => [
-                    'tab' => 'Content blocks',
+                    'tab' => 'dieterholvoet.contentblocks::plugin.name',
                     'type' => 'contentblockrepeater',
-                    'prompt' => 'Add another content block',
+                    'prompt' => 'dieterholvoet.contentblocks::lang.add_content_block',
                     'groups' => $groups,
                 ],
             ]);
@@ -99,8 +99,8 @@ class BackendFormEventListener
         if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_container')) {
             $widget->addTabFields([
                 'viewBag[contentBlockContainer]' => [
-                    'tab' => 'Content blocks',
-                    'title' => 'Content block container',
+                    'tab' => 'dieterholvoet.contentblocks::plugin.name',
+                    'title' => 'dieterholvoet.contentblocks::field.container',
                     'type' => 'dropdown',
                     'options' => array_map(
                         function (array $definition) { return $definition['label']; },
@@ -113,9 +113,9 @@ class BackendFormEventListener
         if ($this->user->hasPermission('dieterholvoet.contentblocks.manage_content_blocks')) {
             $widget->addTabFields([
                 'contentBlocks' => [
-                    'tab' => 'Content blocks',
+                    'tab' => 'dieterholvoet.contentblocks::plugin.name',
                     'type' => 'contentblockrepeater',
-                    'prompt' => 'Add another content block',
+                    'prompt' => 'dieterholvoet.contentblocks::lang.add_content_block',
                     'groups' => $groups,
                 ],
             ]);

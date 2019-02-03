@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'container' => [
+        'label' => 'Content block container',
+    ],
     'settings' => [
         'default_container' => [
             'label' => 'Default container',

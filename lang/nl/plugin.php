@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'name' => 'Content blocks',
-    'description' => 'Koppel model-gebaseerde content blocks aan pagina\'s.',
+    'name' => 'Inhoudsblokken',
+    'description' => 'Koppel model-gebaseerde inhoudsblokken aan pagina\'s.',
     'permissions' => [
-        'manage_content_blocks' => 'Beheer content blocks',
-        'manage_container' => 'Beheer content block containers',
+        'manage_content_blocks' => 'Beheer inhoudsblokken',
+        'manage_container' => 'Beheer inhoudsblokcontainers',
         'manage_settings' => 'Beheer de instellingen van de plugin',
     ],
 ];
