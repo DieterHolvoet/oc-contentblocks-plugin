@@ -86,6 +86,22 @@ class PageSaveEventListener
                 foreach ($this->prepareModelsToSave($contentBlock, $data) as $modelToSave) {
                     $modelToSave->save();
                 }
+
+                foreach (array_keys(post('RLTranslate', [])) as $langcode) {
+                    $translationData = post("RLTranslate.{$langcode}.contentBlocks", []);
+                    $translationData = array_values($translationData)[$i] ?? null;
+
+                    if (!$translationData) {
+                        continue;
+                    }
+
+                    $contentBlock->translateContext($langcode);
+
+                    /** @var Model $modelToSave */
+                    foreach ($this->prepareModelsToSave($contentBlock, $translationData) as $modelToSave) {
+                        $modelToSave->save();
+                    }
+                }
             }
         });
     }
