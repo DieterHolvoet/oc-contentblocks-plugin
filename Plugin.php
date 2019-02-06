@@ -3,6 +3,7 @@
 namespace DieterHolvoet\ContentBlocks;
 
 use DieterHolvoet\ContentBlocks\Classes\ContainerDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContainerManager;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockManager;
 use DieterHolvoet\ContentBlocks\Classes\HostDefinitionManager;
@@ -76,6 +77,12 @@ class Plugin extends PluginBase
             );
         });
 
+        $this->app->bind('dieterholvoet.contentBlocks.containerManager', function () {
+            return new ContainerManager(
+                Settings::instance()
+            );
+        });
+
         $this->app->bind('dieterholvoet.contentBlocks.contentBlockDefinitionManager', function (ContainerInterface $container) {
             return new ContentBlockDefinitionManager(
                 $container->get('files'),
@@ -111,9 +118,10 @@ class Plugin extends PluginBase
         $this->app->bind('dieterholvoet.contentBlocks.backendFormListener', function (ContainerInterface $container) {
             return new BackendFormEventListener(
                 $container->get('backend.auth'),
-                PluginManager::instance(),
                 $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.containerDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.containerManager'),
+                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
                 Settings::instance()
             );
         });
@@ -121,8 +129,10 @@ class Plugin extends PluginBase
         $this->app->bind('dieterholvoet.contentBlocks.pageSaveListener', function (ContainerInterface $container) {
             return new PageSaveEventListener(
                 $container->get('db'),
+                $container->get('backend.auth'),
                 $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.containerManager'),
                 Settings::instance()
             );
         });
@@ -140,6 +150,8 @@ class Plugin extends PluginBase
 
         $this->app->bind('dieterholvoet.contentBlocks.pageExtender', function (ContainerInterface $container) {
             return new PageExtender(
+                $container->get('dieterholvoet.contentBlocks.containerManager'),
+                $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.contentBlockManager')
             );
         });

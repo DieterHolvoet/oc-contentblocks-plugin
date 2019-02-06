@@ -1,1 +1,4 @@
 1.0.1: First version
+1.1.0:
+    - Added Container model
+    - 110_create_containers_table.php

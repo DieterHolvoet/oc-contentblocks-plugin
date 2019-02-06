@@ -2,10 +2,14 @@
 
 namespace DieterHolvoet\ContentBlocks\EventListeners;
 
+use Backend\Classes\AuthManager;
+use Backend\Models\User;
 use Backend\Traits\FormModelSaver;
 use Cms\Controllers\Index;
+use DieterHolvoet\ContentBlocks\Classes\ContainerManager;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
 use DieterHolvoet\ContentBlocks\Classes\HostDefinitionManager;
+use Dieterholvoet\Contentblocks\Models\Container;
 use DieterHolvoet\ContentBlocks\Models\Settings;
 use Illuminate\Database\DatabaseManager;
 use October\Rain\Database\Model;
@@ -16,53 +20,64 @@ class PageSaveEventListener
 
     /** @var DatabaseManager */
     protected $database;
+    /** @var User */
+    protected $user;
     /** @var ContentBlockDefinitionManager */
     protected $contentBlockDefinitions;
     /** @var HostDefinitionManager */
     protected $hostDefinitions;
+    /** @var ContainerManager */
+    protected $containerManager;
     /** @var Settings */
     protected $settings;
 
     public function __construct(
         DatabaseManager $database,
+        AuthManager $authManager,
         ContentBlockDefinitionManager $contentBlockDefinitions,
         HostDefinitionManager $hostDefinitions,
+        ContainerManager $containerManager,
         Settings $settings
     ) {
         $this->database = $database;
+        $this->user = $authManager->getUser();
         $this->contentBlockDefinitions = $contentBlockDefinitions;
         $this->hostDefinitions = $hostDefinitions;
+        $this->containerManager = $containerManager;
         $this->settings = $settings;
     }
 
     public function onCmsPageSave(Index $template, $instance)
     {
-        if (
-            !$instance instanceof \Cms\Classes\Page
-            || !$this->settings->getModelsPlugin()
-        ) {
-            return;
-        }
-
-        $this->saveContentBlocks('page', $instance);
+        $this->saveContentBlocks($instance);
     }
 
     public function onStaticPageSave($controller, $instance, $type)
     {
-        if (
-            !$instance instanceof \RainLab\Pages\Classes\Page
-            || !$this->settings->getModelsPlugin()
-        ) {
+        $this->saveContentBlocks($instance);
+    }
+
+    protected function saveContentBlocks($instance)
+    {
+        if (!$this->settings->getModelsPlugin()) {
             return;
         }
 
-        $this->saveContentBlocks('static-page', $instance);
-    }
+        $hostType = $this->hostDefinitions->getType($instance);
+        $hostId = $this->hostDefinitions->getId($instance);
 
-    protected function saveContentBlocks(string $hostType, $instance)
-    {
-        $this->database->transaction(function () use ($hostType, $instance) {
-            $hostId = $this->hostDefinitions->getId($instance);
+        if (!$hostType) {
+            return;
+        }
+
+        $this->database->transaction(function () use ($hostType, $hostId) {
+
+            // Update container
+            $containerId = post('contentBlockContainer');
+
+            if ($containerId && $this->user->hasPermission('dieterholvoet.contentblocks.manage_container')) {
+                $this->containerManager->setContainer($hostType, $hostId, $containerId);
+            }
 
             // Delete existing content blocks
             foreach ($this->contentBlockDefinitions->getModels() as $className) {
