@@ -5,6 +5,7 @@ namespace DieterHolvoet\ContentBlocks\EventListeners;
 use Backend\Classes\AuthManager;
 use Backend\Models\User;
 use Backend\Widgets\Form;
+use Cms\Classes\CmsObject;
 use DieterHolvoet\ContentBlocks\Classes\ContainerDefinitionManager;
 use DieterHolvoet\ContentBlocks\Classes\ContainerManager;
 use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
@@ -44,7 +45,7 @@ class BackendFormEventListener
 
     public function onExtendFields(Form $widget)
     {
-        if (!$this->settings->getModelsPlugin() || $widget->isNested) {
+        if ($widget->isNested || !$widget->model instanceof CmsObject || !$this->settings->getModelsPlugin()) {
             return;
         }
 
