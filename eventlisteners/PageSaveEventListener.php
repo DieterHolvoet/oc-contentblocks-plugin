@@ -102,6 +102,11 @@ class PageSaveEventListener
                     $modelToSave->save();
                 }
 
+                /** @var Model $contentBlock */
+                if (!$contentBlock->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel')) {
+                    continue;
+                }
+
                 foreach (array_keys(post('RLTranslate', [])) as $langcode) {
                     $translationData = post("RLTranslate.{$langcode}.contentBlocks", []);
                     $translationData = array_values($translationData)[$i] ?? null;
