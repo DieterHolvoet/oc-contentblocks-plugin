@@ -88,13 +88,15 @@ class PageSaveEventListener
             }
 
             // Recreate content blocks
-            foreach (array_values(post('contentBlocks', [])) as $i => $data) {
+            $contentBlocks = post('contentBlocks', []);
+            foreach ($contentBlocks as $key => $data) {
                 $className = $this->contentBlockDefinitions->getClassName($data['_group']);
                 $contentBlock = new $className;
+                $index = array_search($key, array_keys($contentBlocks), true);
 
                 $data['contentblock_host_id'] = $hostId;
                 $data['contentblock_host_type'] = $hostType;
-                $data['contentblock_weight'] = $i;
+                $data['contentblock_weight'] = $index;
                 unset($data['_group']);
 
                 /** @var Model $modelToSave */
@@ -108,10 +110,9 @@ class PageSaveEventListener
                 }
 
                 foreach (array_keys(post('RLTranslate', [])) as $langcode) {
-                    $translationData = post("RLTranslate.{$langcode}.contentBlocks", []);
-                    $translationData = array_values($translationData)[$i] ?? null;
+                    $translationData = post("RLTranslate.{$langcode}.contentBlocks.{$key}", []);
 
-                    if (!$translationData) {
+                    if (empty($translationData)) {
                         continue;
                     }
 
