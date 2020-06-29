@@ -78,6 +78,10 @@ class PageExtender
             if (isset($model->attributes['contentBlocks'])) {
                 unset($model->attributes['contentBlocks']);
             }
+
+            if (isset($model->attributes['viewBag']['localeContentBlocks'])) {
+                unset($model->attributes['viewBag']['localeContentBlocks']);
+            }
         });
     }
 }
