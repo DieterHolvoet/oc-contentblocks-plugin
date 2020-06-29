@@ -4,26 +4,21 @@ namespace DieterHolvoet\ContentBlocks\EventListeners;
 
 use Backend\Classes\AuthManager;
 use Backend\Models\User;
-use Backend\Traits\FormModelSaver;
 use Cms\Controllers\Index;
 use DieterHolvoet\ContentBlocks\Classes\ContainerManager;
-use DieterHolvoet\ContentBlocks\Classes\ContentBlockDefinitionManager;
+use DieterHolvoet\ContentBlocks\Classes\ContentBlockManager;
 use DieterHolvoet\ContentBlocks\Classes\HostDefinitionManager;
-use Dieterholvoet\Contentblocks\Models\Container;
 use DieterHolvoet\ContentBlocks\Models\Settings;
 use Illuminate\Database\DatabaseManager;
-use October\Rain\Database\Model;
 
 class PageSaveEventListener
 {
-    use FormModelSaver;
-
     /** @var DatabaseManager */
     protected $database;
     /** @var User */
     protected $user;
-    /** @var ContentBlockDefinitionManager */
-    protected $contentBlockDefinitions;
+    /** @var ContentBlockManager */
+    protected $contentBlocks;
     /** @var HostDefinitionManager */
     protected $hostDefinitions;
     /** @var ContainerManager */
@@ -34,14 +29,14 @@ class PageSaveEventListener
     public function __construct(
         DatabaseManager $database,
         AuthManager $authManager,
-        ContentBlockDefinitionManager $contentBlockDefinitions,
+        ContentBlockManager $contentBlocks,
         HostDefinitionManager $hostDefinitions,
         ContainerManager $containerManager,
         Settings $settings
     ) {
         $this->database = $database;
         $this->user = $authManager->getUser();
-        $this->contentBlockDefinitions = $contentBlockDefinitions;
+        $this->contentBlocks = $contentBlocks;
         $this->hostDefinitions = $hostDefinitions;
         $this->containerManager = $containerManager;
         $this->settings = $settings;
@@ -70,8 +65,8 @@ class PageSaveEventListener
             return;
         }
 
-        $this->database->transaction(function () use ($hostType, $hostId) {
-
+        $this->database->transaction(function () use ($instance, $hostType, $hostId)
+        {
             // Update container
             $containerId = post('contentBlockContainer');
 
@@ -79,50 +74,25 @@ class PageSaveEventListener
                 $this->containerManager->setContainer($hostType, $hostId, $containerId);
             }
 
-            // Delete existing content blocks
-            foreach ($this->contentBlockDefinitions->getModels() as $className) {
-                $className::where([
-                    'contentblock_host_id' => $hostId,
-                    'contentblock_host_type' => $hostType,
-                ])->delete();
-            }
 
             // Recreate content blocks
-            $contentBlocks = post('contentBlocks', []);
-            foreach ($contentBlocks as $key => $data) {
-                $className = $this->contentBlockDefinitions->getClassName($data['_group']);
-                $contentBlock = new $className;
-                $index = array_search($key, array_keys($contentBlocks), true);
-
-                $data['contentblock_host_id'] = $hostId;
-                $data['contentblock_host_type'] = $hostType;
-                $data['contentblock_weight'] = $index;
-                unset($data['_group']);
-
-                /** @var Model $modelToSave */
-                foreach ($this->prepareModelsToSave($contentBlock, $data) as $modelToSave) {
-                    $modelToSave->save();
-                }
-
-                /** @var Model $contentBlock */
-                if (!$contentBlock->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel')) {
-                    continue;
-                }
-
-                foreach (array_keys(post('RLTranslate', [])) as $langcode) {
-                    $translationData = post("RLTranslate.{$langcode}.contentBlocks.{$key}", []);
-
-                    if (empty($translationData)) {
+            if ($translationData = post('RLTranslate', [])) {
+                foreach ($translationData as $langcode => $data) {
+                    if (!isset($data['contentBlocks']) || !$data = json_decode($data['contentBlocks'], true)) {
                         continue;
                     }
 
-                    $contentBlock->translateContext($langcode);
-
-                    /** @var Model $modelToSave */
-                    foreach ($this->prepareModelsToSave($contentBlock, $translationData) as $modelToSave) {
-                        $modelToSave->save();
-                    }
+                    $instance->translateContext($langcode);
+                    $this->contentBlocks->deleteBlocks($instance);
+                    $this->contentBlocks->addBlocksFromRepeaterData($instance, $data);
                 }
+
+                return;
+            }
+
+            if ($data = post('contentBlocks', [])) {
+                $this->contentBlocks->deleteBlocks($instance);
+                $this->contentBlocks->addBlocksFromRepeaterData($instance, $data);
             }
         });
     }

@@ -2,13 +2,13 @@
 
 namespace DieterHolvoet\ContentBlocks\FormWidgets;
 
-use Backend\FormWidgets\Repeater;
+use RainLab\Translate\FormWidgets\MLRepeater;
 
 /**
- * A form widget extending the native repeater widget. The big difference is
+ * A form widget extending the translatable repeater widget. The big difference is
  * that this widget operates directly on the models instead of on array values.
  */
-class ContentBlockRepeater extends Repeater
+class MLContentBlockRepeater extends MLRepeater
 {
     use ContentBlockRepeaterTrait;
 }

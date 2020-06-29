@@ -78,11 +78,24 @@ class BackendFormEventListener
             $widget->addTabFields([
                 'contentBlocks' => [
                     'tab' => 'dieterholvoet.contentblocks::plugin.name',
-                    'type' => 'contentblockrepeater',
+                    'type' => $this->getRepeaterType($widget),
                     'prompt' => 'dieterholvoet.contentblocks::lang.add_content_block',
                     'groups' => $groups,
                 ],
             ]);
         }
+    }
+
+    protected function getRepeaterType(Form $widget): string
+    {
+        if (
+            $widget->model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableModel')
+            || $widget->model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatablePage')
+            || $widget->model->isClassExtendedWith('RainLab.Translate.Behaviors.TranslatableCmsObject')
+        ) {
+            return 'mlcontentblockrepeater';
+        }
+
+        return 'contentblockrepeater';
     }
 }

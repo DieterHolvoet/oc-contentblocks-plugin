@@ -12,7 +12,8 @@ use DieterHolvoet\ContentBlocks\EventListeners\BackendFormEventListener;
 use DieterHolvoet\ContentBlocks\EventListeners\PageSaveEventListener;
 use DieterHolvoet\ContentBlocks\Extenders\PageExtender;
 use DieterHolvoet\ContentBlocks\Extenders\ContentBlockExtender;
-use Dieterholvoet\Contentblocks\FormWidgets\ContentBlockRepeater;
+use DieterHolvoet\ContentBlocks\FormWidgets\ContentBlockRepeater;
+use DieterHolvoet\ContentBlocks\FormWidgets\MLContentBlockRepeater;
 use DieterHolvoet\ContentBlocks\Models\Settings;
 use DieterHolvoet\ContentBlocks\Validators\ContentBlockPluginValidator;
 use Event;
@@ -130,7 +131,7 @@ class Plugin extends PluginBase
             return new PageSaveEventListener(
                 $container->get('db'),
                 $container->get('backend.auth'),
-                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.contentBlockManager'),
                 $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.containerManager'),
                 Settings::instance()
@@ -152,6 +153,7 @@ class Plugin extends PluginBase
             return new PageExtender(
                 $container->get('dieterholvoet.contentBlocks.containerManager'),
                 $container->get('dieterholvoet.contentBlocks.hostDefinitionManager'),
+                $container->get('dieterholvoet.contentBlocks.contentBlockDefinitionManager'),
                 $container->get('dieterholvoet.contentBlocks.contentBlockManager')
             );
         });
@@ -177,6 +179,11 @@ class Plugin extends PluginBase
          * Event listeners
          */
 
+        /**
+         * Priority needs to be higher than the listener responsible for
+         * swapping widgets with their translatable counterparts
+         * @see \RainLab\Translate\Classes\EventRegistry::registerFormFieldReplacements
+         */
         Event::listen('backend.form.extendFields', 'dieterholvoet.contentBlocks.backendFormListener@onExtendFields');
         Event::listen('cms.template.save', 'dieterholvoet.contentBlocks.pageSaveListener@onCmsPageSave');
         Event::listen('pages.object.save', 'dieterholvoet.contentBlocks.pageSaveListener@onStaticPageSave');
@@ -237,6 +244,7 @@ class Plugin extends PluginBase
     {
         return [
             ContentBlockRepeater::class => 'contentblockrepeater',
+            MLContentBlockRepeater::class => 'mlcontentblockrepeater',
         ];
     }
 }
